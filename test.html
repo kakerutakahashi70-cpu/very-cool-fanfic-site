@@ -1,0 +1,220 @@
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Writer's Room</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="site-banner" id="siteBanner">
+      <div class="banner-shade"></div>
+      <div class="banner-content">
+        <p class="eyebrow">SEU ESPAÇO DE CRIAÇÃO</p>
+        <h1 id="siteTitle">The Writer's Room</h1>
+        <p id="siteSubtitle">Um lugar para suas histórias criarem raízes.</p>
+      </div>
+      <button class="icon-button banner-settings" id="openAppearance" title="Personalizar aparência" aria-label="Personalizar aparência">⚙</button>
+    </header>
+
+    <div class="workspace">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-top">
+          <label class="search-box"><span>⌕</span><input id="searchDocs" type="search" placeholder="Buscar textos…"></label>
+          <button class="primary-button full" id="newDoc">＋ Novo texto</button>
+        </div>
+        <div class="sidebar-heading"><span>SUA BIBLIOTECA</span><span id="docCount">0</span></div>
+        <div id="docList" class="doc-list" aria-label="Seus documentos"></div>
+        <div class="sidebar-bottom">
+          <button class="side-action" id="openAppearanceSide">◐ Personalizar site</button>
+          <button class="side-action" id="exportBackup">⇩ Exportar backup</button>
+          <button class="side-action" id="importBackup">⇧ Importar backup</button>
+          <input type="file" id="importFile" accept=".json,application/json" hidden>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <div class="toolbar-top">
+          <div class="mobile-actions">
+            <button class="icon-button" id="toggleSidebar" aria-label="Abrir biblioteca" title="Biblioteca">☰</button>
+          </div>
+          <div class="save-state" id="saveState">Tudo salvo</div>
+          <div class="toolbar-top-actions">
+            <button class="quiet-button" id="readingMode">◉ Ler</button>
+            <button class="quiet-button" id="typewriterMode">⌨ Typewriter</button>
+            <button class="icon-button" id="moreMenu" title="Mais opções">•••</button>
+          </div>
+        </div>
+
+        <section class="editor-wrap" id="editorWrap">
+          <div class="empty-state" id="emptyState">
+            <div class="empty-icon">✎</div>
+            <h2>Um espaço em branco, infinitas possibilidades.</h2>
+            <p>Crie um texto novo ou escolha um da sua biblioteca para começar.</p>
+            <button class="primary-button" id="emptyNewDoc">＋ Criar meu primeiro texto</button>
+          </div>
+
+          <article class="document-editor" id="documentEditor" hidden>
+            <input id="docTitle" class="document-title" placeholder="Título sem nome" maxlength="180" aria-label="Título do texto">
+            <div class="document-meta">
+              <span id="lastEdited">Documento novo</span>
+              <span class="meta-dot">·</span>
+              <span id="wordCount">0 palavras</span>
+            </div>
+
+            <div class="format-toolbar" id="formatToolbar" role="toolbar" aria-label="Formatação de texto">
+              <select id="blockFormat" aria-label="Estilo do parágrafo" title="Estilo do parágrafo">
+                <option value="p">Texto normal</option>
+                <option value="h1">Título grande</option>
+                <option value="h2">Título</option>
+                <option value="h3">Subtítulo</option>
+                <option value="blockquote">Citação</option>
+              </select>
+              <span class="tool-divider"></span>
+              <button class="tool-button" data-cmd="bold" title="Negrito (Ctrl+B)"><b>B</b></button>
+              <button class="tool-button" data-cmd="italic" title="Itálico (Ctrl+I)"><i>I</i></button>
+              <button class="tool-button" data-cmd="underline" title="Sublinhado (Ctrl+U)"><u>U</u></button>
+              <button class="tool-button" data-cmd="strikeThrough" title="Tachado"><s>S</s></button>
+              <span class="tool-divider"></span>
+              <button class="tool-button" data-cmd="insertUnorderedList" title="Lista com marcadores">☷</button>
+              <button class="tool-button" data-cmd="insertOrderedList" title="Lista numerada">1.</button>
+              <button class="tool-button" data-cmd="justifyLeft" title="Alinhar à esquerda">⇤</button>
+              <button class="tool-button" data-cmd="justifyCenter" title="Centralizar">≡</button>
+              <button class="tool-button" data-cmd="justifyRight" title="Alinhar à direita">⇥</button>
+              <span class="tool-divider"></span>
+              <label class="color-tool" title="Cor do texto">A<input type="color" id="textColor" value="#433a35" aria-label="Cor do texto"></label>
+              <button class="tool-button dropcap-button" id="dropCap" title="Aplicar ou remover capitular">A↓</button>
+              <button class="tool-button" id="clearFormat" title="Remover formatação da seleção">Tx</button>
+            </div>
+
+            <div id="richEditor" class="rich-editor" contenteditable="true" spellcheck="true" data-placeholder="Comece a escrever aqui…"></div>
+            <div class="editor-footer">
+              <span>Suas palavras pertencem a você.</span>
+              <button class="text-button" id="deleteDoc">Excluir texto</button>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="appearanceModal" hidden>
+    <section class="settings-panel" role="dialog" aria-modal="true" aria-labelledby="appearanceTitle">
+      <header class="settings-header">
+        <div>
+          <p class="eyebrow">DO SEU JEITO</p>
+          <h2 id="appearanceTitle">Personalizar aparência</h2>
+        </div>
+        <button class="icon-button" id="closeAppearance" aria-label="Fechar">✕</button>
+      </header>
+
+      <div class="settings-body">
+        <section class="settings-section">
+          <h3>Identidade do site</h3>
+          <label class="field-label">Nome do site
+            <input id="settingTitle" maxlength="70" value="The Writer's Room">
+          </label>
+          <label class="field-label">Subtítulo
+            <input id="settingSubtitle" maxlength="150" value="Um lugar para suas histórias criarem raízes.">
+          </label>
+          <label class="field-label">Banner personalizado
+            <input id="bannerUpload" type="file" accept="image/*">
+          </label>
+          <p class="hint">Escolha uma imagem sua. Prefira imagens otimizadas. A imagem fica guardada localmente neste navegador.</p>
+          <div class="banner-preview" id="bannerPreview"><span>Prévia do banner</span></div>
+          <button class="quiet-button" id="removeBanner">Remover banner</button>
+        </section>
+
+        <section class="settings-section">
+          <h3>Paleta de cores</h3>
+          <p class="hint">As mudanças aparecem na prévia imediatamente.</p>
+          <div class="color-grid">
+            <label class="color-setting">Fundo da página<input type="color" id="cBg" value="#f2ebdd"></label>
+            <label class="color-setting">Painéis<input type="color" id="cPanel" value="#fffdf8"></label>
+            <label class="color-setting">Texto principal<input type="color" id="cText" value="#433a35"></label>
+            <label class="color-setting">Texto suave<input type="color" id="cMuted" value="#85776d"></label>
+            <label class="color-setting">Cor de destaque<input type="color" id="cAccent" value="#a56d78"></label>
+            <label class="color-setting">Destaque suave<input type="color" id="cAccentSoft" value="#f1e2e4"></label>
+            <label class="color-setting">Bordas<input type="color" id="cBorder" value="#e4dbce"></label>
+            <label class="color-setting">Barra lateral<input type="color" id="cSidebar" value="#f8f4ec"></label>
+          </div>
+        </section>
+
+        <section class="settings-section">
+          <h3>Tipografia</h3>
+          <label class="field-label">Fonte da interface
+            <select id="uiFont">
+              <option value="system">Sistema (limpa)</option>
+              <option value="serif">Serifada clássica</option>
+              <option value="sans">Sem serifa</option>
+              <option value="mono">Monoespaçada</option>
+            </select>
+          </label>
+          <label class="field-label">Fonte de escrita
+            <select id="writingFont">
+              <option value="serif">Serifada literária</option>
+              <option value="sans">Sem serifa</option>
+              <option value="mono">Máquina de escrever</option>
+              <option value="georgia">Georgia</option>
+            </select>
+          </label>
+          <label class="field-label">Tamanho do texto
+            <output id="fontSizeOutput">18 px</output>
+            <input id="writingSize" type="range" min="14" max="28" value="18">
+          </label>
+          <label class="field-label">Largura da página
+            <output id="widthOutput">760 px</output>
+            <input id="writingWidth" type="range" min="520" max="1100" step="20" value="760">
+          </label>
+        </section>
+
+        <section class="settings-section">
+          <h3>Detalhes</h3>
+          <label class="field-label">Arredondamento dos painéis
+            <output id="radiusOutput">14 px</output>
+            <input id="panelRadius" type="range" min="0" max="28" value="14">
+          </label>
+          <label class="check-setting"><input type="checkbox" id="showBanner" checked> Mostrar banner</label>
+        </section>
+
+        <section class="settings-section preview-section">
+          <h3>Prévia</h3>
+          <div class="mini-preview">
+            <div class="mini-preview-banner" id="miniPreviewBanner"></div>
+            <div class="mini-preview-card">
+              <div class="mini-line short"></div>
+              <div class="mini-line"></div>
+              <div class="mini-line"></div>
+              <div class="mini-chip">Um pequeno detalhe</div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer class="settings-footer">
+        <button class="quiet-button" id="resetAppearance">Restaurar padrão</button>
+        <button class="primary-button" id="saveAppearance">Salvar aparência</button>
+      </footer>
+    </section>
+  </div>
+
+  <div class="reading-view" id="readingView" hidden>
+    <header class="reading-header">
+      <button class="quiet-button" id="exitReading">← Voltar ao editor</button>
+      <div>
+        <button class="icon-button" id="readingSmaller" title="Diminuir letra">A−</button>
+        <button class="icon-button" id="readingLarger" title="Aumentar letra">A+</button>
+      </div>
+    </header>
+    <article class="reading-page" id="readingPage">
+      <h1 id="readingTitle"></h1>
+      <div id="readingContent"></div>
+    </article>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
